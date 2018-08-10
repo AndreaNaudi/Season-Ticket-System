@@ -1,0 +1,64 @@
+﻿@model IEnumerable<WebAssignment.Models.Review>
+@using Microsoft.AspNet.Identity;
+@using WebAssignment.Models;
+@{
+    ViewBag.Title = "Reviews";
+    if (User.IsInRole(RoleName.Administrator))
+    {
+        Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_LayoutUser.cshtml";
+    }
+}
+
+<h2>Reviews</h2>
+@if (!Model.Any())
+{
+    <p>We don't have any reviews yet.</p>
+}
+else
+{
+    <table id="reviews" class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>Written By</th>
+                <th>Comment</th>
+                <th>Rating</th>
+                <th>Date Written</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var review in Model)
+            {
+                <tr>
+                    <td>@review.GetUser().Email</td>
+                    <td>@review.Comment</td>
+                    <td>@review.Rating</td>
+                    <td>@review.DateWritten</td>
+                    <td>
+                        <span style="cursor:pointer" title="Details" onclick="location.href='@Url.Action("Details", "Review", new { id = review.Id })'" class="glyphicon glyphicon-eye-open"></span>
+                        &nbsp;
+                        @if (User.Identity.GetUserId() == review.UserId || User.IsInRole(RoleName.Administrator))
+                        {
+                            <span style="cursor:pointer" title="Edit" onclick="location.href='@Url.Action("Edit", "Review", new { id = review.Id })'" class="glyphicon glyphicon-pencil"></span>
+                        }
+                        &nbsp;
+                        @if (User.Identity.GetUserId() == review.UserId || User.IsInRole(RoleName.Administrator))
+                        {
+                            <span style="cursor:pointer" title="Remove" onclick="location.href='@Url.Action("Remove", "Review", new { id = review.Id })'" class="glyphicon glyphicon-trash"></span>
+                        }
+                        
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+@if (User.IsInRole(RoleName.User))
+{
+    <input type="button" class="btn btn-success" value="New Review" onclick="location.href='@Url.Action("New", "Review")'" />
+}
+

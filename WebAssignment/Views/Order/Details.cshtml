@@ -1,0 +1,82 @@
+﻿@model WebAssignment.ViewModels.OrderDetailsViewModel
+@using WebAssignment.Models
+@{
+    ViewBag.Title = "Details";
+    if (User.IsInRole(RoleName.Administrator))
+    {
+        Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_LayoutUser.cshtml";
+    }
+    var ticket_games = Model.Tickets;
+    var configured = (Model.Configured == 0) ? "No" : "Yes";
+    var color = (Model.Configured == 0) ? "Red" : "Green";
+    var game = ticket_games.ElementAt(0).GetGame().getFixture();
+}
+
+<h2>Details</h2>
+<table id="details_table" class="table table-bordered table-hover">
+    <tbody>
+        <tr>
+            <th>Placed By</th>
+            <td>@Model.UserEmail</td>
+        </tr>
+        <tr>
+            <th>Total Cost (€)</th>
+            <td>@Model.Cost</td>
+        </tr>
+        <tr>
+            <th>Game</th>
+            <td>@Model.Fixture</td>
+        </tr>
+        <tr>
+            <th>Date Ordered</th>
+            <td>@Model.Date.ToString("MMMM dd, yyyy")</td>
+        </tr>
+        @if (User.IsInRole(RoleName.Administrator))
+        {
+            <tr>
+                <th>Configured</th>
+                <td style="color:@color">@configured</td>
+            </tr>
+        }
+        
+    </tbody>
+</table>
+<h3>Tickets</h3>
+@using (Html.BeginForm("ConfigureAll", "Order", new { id = Model.oid }))
+{
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>Position</th>
+            <th>Price (€)</th>
+            <th>Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Ticket_Game tg in ticket_games)
+        {
+            var ticket = tg.GetTicket();
+            <tr>
+                <td>@ticket.getPosition()</td>
+                <td>@tg.Price</td>
+                <td>@tg.Name</td>                
+            </tr>
+
+
+        }
+
+    </tbody>
+</table>
+    if (configured == "No" && User.IsInRole(RoleName.Administrator))
+    {
+        @Html.AntiForgeryToken()
+
+        <button type="submit" class="btn btn-primary">Configure All</button>
+    }
+
+}
+

@@ -1,0 +1,40 @@
+﻿@model WebAssignment.Models.PayPalModel
+<html>
+<head>
+    <script src="@Url.Content("~/Scripts/jquery-1.10.2.min.js")" type="test/javascript"></script>
+</head>
+<body>
+    <form id="hiddenform" action=@ViewBag.actionURL>
+        @Html.HiddenFor(model => model.cmd)
+        @Html.HiddenFor(model => model.business)
+        @Html.HiddenFor(model => model.no_shipping)
+        @Html.HiddenFor(model => model.@return)
+        @Html.HiddenFor(model => model.cancel_return)
+        @Html.HiddenFor(model => model.notify_url)
+        @Html.HiddenFor(model => model.currency_code)
+        @Html.HiddenFor(model => model.item_name)
+        @Html.HiddenFor(model => model.amount)
+        @Html.HiddenFor(model => model.Tgs)
+    </form>
+
+    <p style="text-align: center">
+        <h3>
+            Connecting to PayPal.
+        </h3>
+        <p class="loader"></p>
+    </p>
+        
+    
+    
+</body>
+</html>
+@Scripts.Render("~/bundles/jquery")
+
+<script type="text/javascript" language="javascript">
+
+    $(this.document).ready(function () {
+        var form = $("form");
+        form.submit();
+    });
+</script>
+ 

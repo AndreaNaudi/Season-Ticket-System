@@ -1,0 +1,48 @@
+﻿@model IEnumerable<WebAssignment.Models.Ticket>
+@using WebAssignment.Models
+@{
+    ViewBag.Title = "Tickets";
+    if (User.IsInRole(RoleName.Administrator))
+    {
+        Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_LayoutUser.cshtml";
+    }
+}
+
+<h2>Tickets</h2>
+@if (!Model.Any())
+{
+    <p>We don't have any tickets yet.</p>
+}
+else
+{
+    <table id="tickets" class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>Owner</th>
+                <th>Category</th>
+                <th>Position</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var ticket in Model)
+            {
+                <tr>
+                    <td>@ticket.Owner</td>
+                    <td>@ticket.Ref_Category.Name</td>
+                    <td>@ticket.getPosition()</td>
+                    <td>
+                        <span style="cursor:pointer" title="Details" onclick="location.href='@Url.Action("Details", "Ticket", new { id = ticket.Id })'" class="glyphicon glyphicon-eye-open"></span>
+                        &nbsp;
+                        <span style="cursor:pointer" title="Edit" onclick="location.href='@Url.Action("Edit", "Ticket", new { id = ticket.Id })'" class="glyphicon glyphicon-pencil"></span>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+<input type="button" class="btn btn-success" value="New Ticket" onclick="location.href='@Url.Action("New", "Ticket")'" />

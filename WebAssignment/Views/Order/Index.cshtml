@@ -1,0 +1,55 @@
+﻿@model WebAssignment.ViewModels.OrderIndexViewModel
+@using WebAssignment.Models
+@{
+    ViewBag.Title = "Orders";
+    if (User.IsInRole(RoleName.Administrator))
+    {
+        Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_LayoutUser.cshtml";
+    }
+    var orders = Model.Orders;
+    var games = Model.Games;
+}
+
+<h2>Orders</h2>
+@if (!orders.Any())
+{
+    <p>We don't have any orders yet.</p>
+}
+else
+{
+    foreach (Game game in games) {
+        <h3>@game.getFixture()</h3>
+        <table id="orders" class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>Placed By</th>
+                    <th>Total Cost (€)</th>
+                    <th>Date Ordered</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var order in orders)
+                {
+                    if (order.GetGame().Equals(game))
+                    {
+                        <tr>
+                            <td>@order.GetUser().Email</td>
+                            <td>@order.Total</td>
+                            <td>@order.Date</td>
+                            <td>
+                                <span style="cursor:pointer" title="Details" onclick="location.href='@Url.Action("Details", "Order", new { id = order.Id })'" class="glyphicon glyphicon-eye-open"></span>
+                            </td>
+                        </tr>
+                    }
+
+                }
+            </tbody>
+        </table>
+    }
+
+}

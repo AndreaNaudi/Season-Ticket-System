@@ -1,0 +1,70 @@
+﻿@model IEnumerable<WebAssignment.Models.Ticket_Game>
+@using WebAssignment.Models;
+@{
+    ViewBag.Title = "Form";
+    if (User.IsInRole(RoleName.Administrator))
+    {
+        Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_LayoutUser.cshtml";
+    }
+    double? totalPrice = 0;
+    string tgs = "";
+    string product = Model.Count() + " ticket(s) ";
+    string game = null;
+    foreach (Ticket_Game tg in Model)
+    {
+        tgs += @tg.Id + ",";
+        game = tg.Game.getFixture();
+    }
+    tgs = tgs.TrimEnd(',');
+    product += game;
+}
+
+<h2>Order Review</h2>
+
+@using (Html.BeginForm("ValidateCommand", "PayPal"))
+{
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>Category</th>
+                <th>Position</th>
+                <th>Price (€)</th>
+                <th class="required">Assignee</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Ticket_Game tg in Model)
+            {
+                var ticket = tg.GetTicket();
+                totalPrice += tg.Price;
+                <tr @*style="background-color:@color"*@>
+                    <td>@ticket.Ref_Category.Name</td>
+                    <td>@ticket.getPosition()</td>
+                    <td>@tg.Price</td>
+                    <td><input required style="width:100%" class="form-control" placeholder="Enter name and surname" name=@tg.Id type="text"></td>
+                </tr>                
+            }
+
+        </tbody>
+    </table>
+    <div>
+        <label>Product: @product</label><br>
+        <label>Total Price: € @totalPrice</label><br>
+        @Html.AntiForgeryToken()
+        <button type="submit"class="btn btn-primary" name="btnConfirm" >Check Out with Paypal</button>
+    </div>
+}
+
+@section scripts
+{
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+
+
+
+

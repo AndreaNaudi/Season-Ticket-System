@@ -1,0 +1,133 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="WebAssignmentModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Game">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="HomeTeam" Type="varchar" MaxLength="225" Nullable="false" />
+    <Property Name="AwayTeam" Type="varchar" MaxLength="225" Nullable="false" />
+    <Property Name="Date" Type="datetime" Nullable="false" />
+    <Property Name="CompetitionId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Ref_Category">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="varchar" MaxLength="225" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Ref_Competition">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="varchar" MaxLength="225" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Review">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserId" Type="varchar" MaxLength="225" Nullable="false" />
+    <Property Name="Comment" Type="varchar" MaxLength="500" Nullable="false" />
+    <Property Name="DateWritten" Type="datetime" Nullable="false" />
+    <Property Name="Rating" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Ticket">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Owner" Type="varchar" MaxLength="225" Nullable="false" />
+    <Property Name="CategoryId" Type="int" Nullable="false" />
+    <Property Name="Section" Type="int" Nullable="false" />
+    <Property Name="Row" Type="int" Nullable="false" />
+    <Property Name="Seat" Type="int" Nullable="false" />
+    <Property Name="ViewUpload" Type="varchar" MaxLength="225" />
+  </EntityType>
+  <EntityType Name="Ticket_Game">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="TicketId" Type="int" Nullable="false" />
+    <Property Name="GameId" Type="int" Nullable="false" />
+    <Property Name="UserId" Type="varchar" MaxLength="225" />
+    <Property Name="Price" Type="float" />
+    <Property Name="Sold" Type="int" Nullable="false" />
+    <Property Name="Configured" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="Game_fk0">
+    <End Role="Ref_Competition" Type="Self.Ref_Competition" Multiplicity="1" />
+    <End Role="Game" Type="Self.Game" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Ref_Competition">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Game">
+        <PropertyRef Name="CompetitionId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="Ticket_fk0">
+    <End Role="Ref_Category" Type="Self.Ref_Category" Multiplicity="1" />
+    <End Role="Ticket" Type="Self.Ticket" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Ref_Category">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Ticket">
+        <PropertyRef Name="CategoryId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="Ticket_Game_fk0">
+    <End Role="Ticket" Type="Self.Ticket" Multiplicity="1" />
+    <End Role="Ticket_Game" Type="Self.Ticket_Game" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Ticket">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Ticket_Game">
+        <PropertyRef Name="TicketId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="Ticket_Game_fk1">
+    <End Role="Game" Type="Self.Game" Multiplicity="1" />
+    <End Role="Ticket_Game" Type="Self.Ticket_Game" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Game">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Ticket_Game">
+        <PropertyRef Name="GameId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="WebAssignmentModelStoreContainer">
+    <EntitySet Name="Game" EntityType="Self.Game" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Ref_Category" EntityType="Self.Ref_Category" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Ref_Competition" EntityType="Self.Ref_Competition" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Review" EntityType="Self.Review" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Ticket" EntityType="Self.Ticket" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Ticket_Game" EntityType="Self.Ticket_Game" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="Game_fk0" Association="Self.Game_fk0">
+      <End Role="Ref_Competition" EntitySet="Ref_Competition" />
+      <End Role="Game" EntitySet="Game" />
+    </AssociationSet>
+    <AssociationSet Name="Ticket_fk0" Association="Self.Ticket_fk0">
+      <End Role="Ref_Category" EntitySet="Ref_Category" />
+      <End Role="Ticket" EntitySet="Ticket" />
+    </AssociationSet>
+    <AssociationSet Name="Ticket_Game_fk0" Association="Self.Ticket_Game_fk0">
+      <End Role="Ticket" EntitySet="Ticket" />
+      <End Role="Ticket_Game" EntitySet="Ticket_Game" />
+    </AssociationSet>
+    <AssociationSet Name="Ticket_Game_fk1" Association="Self.Ticket_Game_fk1">
+      <End Role="Game" EntitySet="Game" />
+      <End Role="Ticket_Game" EntitySet="Ticket_Game" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

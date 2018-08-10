@@ -1,0 +1,15 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\WebAssignment",
+    "\\WebAssignment\\Content",
+    "\\WebAssignment\\Controllers",
+    "\\WebAssignment\\Uploads",
+    "\\WebAssignment\\Views",
+    "\\WebAssignment\\Views\\Game",
+    "\\WebAssignment\\Views\\Shared",
+    "\\WebAssignment\\Views\\Ticket"
+  ],
+  "SelectedNode": "\\WebAssignment\\Views\\Game\\Form.cshtml",
+  "PreviewInSolutionExplorer": false
+}

@@ -1,0 +1,348 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="WebAssignmentModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="WebAssignmentDbContext" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Games" EntityType="WebAssignmentModel.Game" />
+    <EntitySet Name="Orders" EntityType="WebAssignmentModel.Order" />
+    <EntitySet Name="Order_Ticket_Game" EntityType="WebAssignmentModel.Order_Ticket_Game" />
+    <EntitySet Name="Ref_Category" EntityType="WebAssignmentModel.Ref_Category" />
+    <EntitySet Name="Ref_Competition" EntityType="WebAssignmentModel.Ref_Competition" />
+    <EntitySet Name="Reviews" EntityType="WebAssignmentModel.Review" />
+    <EntitySet Name="Temp_PayPal" EntityType="WebAssignmentModel.Temp_PayPal" />
+    <EntitySet Name="Tickets" EntityType="WebAssignmentModel.Ticket" />
+    <EntitySet Name="Ticket_Game" EntityType="WebAssignmentModel.Ticket_Game" />
+    <AssociationSet Name="Game_fk0" Association="WebAssignmentModel.Game_fk0">
+      <End Role="Ref_Competition" EntitySet="Ref_Competition" />
+      <End Role="Game" EntitySet="Games" />
+    </AssociationSet>
+    <AssociationSet Name="Ticket_Game_fk1" Association="WebAssignmentModel.Ticket_Game_fk1">
+      <End Role="Game" EntitySet="Games" />
+      <End Role="Ticket_Game" EntitySet="Ticket_Game" />
+    </AssociationSet>
+    <AssociationSet Name="Order_Ticket_Game_fk1" Association="WebAssignmentModel.Order_Ticket_Game_fk1">
+      <End Role="Order" EntitySet="Orders" />
+      <End Role="Order_Ticket_Game" EntitySet="Order_Ticket_Game" />
+    </AssociationSet>
+    <AssociationSet Name="Order_Ticket_Game_fk0" Association="WebAssignmentModel.Order_Ticket_Game_fk0">
+      <End Role="Ticket_Game" EntitySet="Ticket_Game" />
+      <End Role="Order_Ticket_Game" EntitySet="Order_Ticket_Game" />
+    </AssociationSet>
+    <AssociationSet Name="Ticket_fk0" Association="WebAssignmentModel.Ticket_fk0">
+      <End Role="Ref_Category" EntitySet="Ref_Category" />
+      <End Role="Ticket" EntitySet="Tickets" />
+    </AssociationSet>
+    <AssociationSet Name="Ticket_Game_fk0" Association="WebAssignmentModel.Ticket_Game_fk0">
+      <End Role="Ticket" EntitySet="Tickets" />
+      <End Role="Ticket_Game" EntitySet="Ticket_Game" />
+    </AssociationSet>
+    <EntitySet Name="C__MigrationHistory" EntityType="WebAssignmentModel.C__MigrationHistory" />
+    <EntitySet Name="AspNetRoles" EntityType="WebAssignmentModel.AspNetRole" />
+    <EntitySet Name="AspNetUserClaims" EntityType="WebAssignmentModel.AspNetUserClaim" />
+    <EntitySet Name="AspNetUserLogins" EntityType="WebAssignmentModel.AspNetUserLogin" />
+    <EntitySet Name="AspNetUsers" EntityType="WebAssignmentModel.AspNetUser" />
+    <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="WebAssignmentModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
+      <End Role="AspNetUser" EntitySet="AspNetUsers" />
+      <End Role="AspNetUserClaim" EntitySet="AspNetUserClaims" />
+    </AssociationSet>
+    <AssociationSet Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" Association="WebAssignmentModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
+      <End Role="AspNetUser" EntitySet="AspNetUsers" />
+      <End Role="AspNetUserLogin" EntitySet="AspNetUserLogins" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Orders__UserId__46B27FE2" Association="WebAssignmentModel.FK__Orders__UserId__46B27FE2">
+      <End Role="AspNetUser" EntitySet="AspNetUsers" />
+      <End Role="Order" EntitySet="Orders" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Review__UserId__40F9A68C" Association="WebAssignmentModel.FK__Review__UserId__40F9A68C">
+      <End Role="AspNetUser" EntitySet="AspNetUsers" />
+      <End Role="Review" EntitySet="Reviews" />
+    </AssociationSet>
+    <AssociationSet Name="AspNetUserRoles" Association="WebAssignmentModel.AspNetUserRoles">
+      <End Role="AspNetRole" EntitySet="AspNetRoles" />
+      <End Role="AspNetUser" EntitySet="AspNetUsers" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Game">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="HomeTeam" Type="String" Nullable="false" MaxLength="225" FixedLength="false" Unicode="false" />
+    <Property Name="AwayTeam" Type="String" Nullable="false" MaxLength="225" FixedLength="false" Unicode="false" />
+    <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="CompetitionId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Ref_Competition" Relationship="WebAssignmentModel.Game_fk0" FromRole="Game" ToRole="Ref_Competition" />
+    <NavigationProperty Name="Ticket_Game" Relationship="WebAssignmentModel.Ticket_Game_fk1" FromRole="Game" ToRole="Ticket_Game" />
+  </EntityType>
+  <EntityType Name="Order">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="Total" Type="Double" Nullable="false" />
+    <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
+    <NavigationProperty Name="Order_Ticket_Game" Relationship="WebAssignmentModel.Order_Ticket_Game_fk1" FromRole="Order" ToRole="Order_Ticket_Game" />
+    <NavigationProperty Name="AspNetUser" Relationship="WebAssignmentModel.FK__Orders__UserId__46B27FE2" FromRole="Order" ToRole="AspNetUser" />
+  </EntityType>
+  <EntityType Name="Order_Ticket_Game">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Ticket_Game_Id" Type="Int32" Nullable="false" />
+    <Property Name="OrderId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Order" Relationship="WebAssignmentModel.Order_Ticket_Game_fk1" FromRole="Order_Ticket_Game" ToRole="Order" />
+    <NavigationProperty Name="Ticket_Game" Relationship="WebAssignmentModel.Order_Ticket_Game_fk0" FromRole="Order_Ticket_Game" ToRole="Ticket_Game" />
+  </EntityType>
+  <EntityType Name="Ref_Category">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="225" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Tickets" Relationship="WebAssignmentModel.Ticket_fk0" FromRole="Ref_Category" ToRole="Ticket" />
+  </EntityType>
+  <EntityType Name="Ref_Competition">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="225" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Games" Relationship="WebAssignmentModel.Game_fk0" FromRole="Ref_Competition" ToRole="Game" />
+  </EntityType>
+  <EntityType Name="Review">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="Comment" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="false" />
+    <Property Name="DateWritten" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Rating" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="AspNetUser" Relationship="WebAssignmentModel.FK__Review__UserId__40F9A68C" FromRole="Review" ToRole="AspNetUser" />
+  </EntityType>
+  <EntityType Name="Temp_PayPal">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="String" Nullable="false" MaxLength="225" FixedLength="false" Unicode="false" />
+    <Property Name="Ticket_Game_Ids" Type="String" Nullable="false" MaxLength="225" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="Ticket">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Owner" Type="String" Nullable="false" MaxLength="225" FixedLength="false" Unicode="false" />
+    <Property Name="CategoryId" Type="Int32" Nullable="false" />
+    <Property Name="Section" Type="Int32" Nullable="false" />
+    <Property Name="Row" Type="Int32" Nullable="false" />
+    <Property Name="Seat" Type="Int32" Nullable="false" />
+    <Property Name="ViewUpload" Type="String" MaxLength="225" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Ref_Category" Relationship="WebAssignmentModel.Ticket_fk0" FromRole="Ticket" ToRole="Ref_Category" />
+    <NavigationProperty Name="Ticket_Game" Relationship="WebAssignmentModel.Ticket_Game_fk0" FromRole="Ticket" ToRole="Ticket_Game" />
+  </EntityType>
+  <EntityType Name="Ticket_Game">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TicketId" Type="Int32" Nullable="false" />
+    <Property Name="GameId" Type="Int32" Nullable="false" />
+    <Property Name="Price" Type="Double" />
+    <Property Name="Sold" Type="Int32" Nullable="false" />
+    <Property Name="Configured" Type="Int32" Nullable="false" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Game" Relationship="WebAssignmentModel.Ticket_Game_fk1" FromRole="Ticket_Game" ToRole="Game" />
+    <NavigationProperty Name="Order_Ticket_Game" Relationship="WebAssignmentModel.Order_Ticket_Game_fk0" FromRole="Ticket_Game" ToRole="Order_Ticket_Game" />
+    <NavigationProperty Name="Ticket" Relationship="WebAssignmentModel.Ticket_Game_fk0" FromRole="Ticket_Game" ToRole="Ticket" />
+  </EntityType>
+  <Association Name="Game_fk0">
+    <End Type="WebAssignmentModel.Ref_Competition" Role="Ref_Competition" Multiplicity="1" />
+    <End Type="WebAssignmentModel.Game" Role="Game" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Ref_Competition">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Game">
+        <PropertyRef Name="CompetitionId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="Ticket_Game_fk1">
+    <End Type="WebAssignmentModel.Game" Role="Game" Multiplicity="1" />
+    <End Type="WebAssignmentModel.Ticket_Game" Role="Ticket_Game" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Game">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Ticket_Game">
+        <PropertyRef Name="GameId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="Order_Ticket_Game_fk1">
+    <End Type="WebAssignmentModel.Order" Role="Order" Multiplicity="1" />
+    <End Type="WebAssignmentModel.Order_Ticket_Game" Role="Order_Ticket_Game" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Order">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Order_Ticket_Game">
+        <PropertyRef Name="OrderId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="Order_Ticket_Game_fk0">
+    <End Type="WebAssignmentModel.Ticket_Game" Role="Ticket_Game" Multiplicity="1" />
+    <End Type="WebAssignmentModel.Order_Ticket_Game" Role="Order_Ticket_Game" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Ticket_Game">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Order_Ticket_Game">
+        <PropertyRef Name="Ticket_Game_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="Ticket_fk0">
+    <End Type="WebAssignmentModel.Ref_Category" Role="Ref_Category" Multiplicity="1" />
+    <End Type="WebAssignmentModel.Ticket" Role="Ticket" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Ref_Category">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Ticket">
+        <PropertyRef Name="CategoryId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="Ticket_Game_fk0">
+    <End Type="WebAssignmentModel.Ticket" Role="Ticket" Multiplicity="1" />
+    <End Type="WebAssignmentModel.Ticket_Game" Role="Ticket_Game" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Ticket">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Ticket_Game">
+        <PropertyRef Name="TicketId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="C__MigrationHistory">
+    <Key>
+      <PropertyRef Name="MigrationId" />
+      <PropertyRef Name="ContextKey" />
+    </Key>
+    <Property Name="MigrationId" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="true" />
+    <Property Name="ContextKey" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="true" />
+    <Property Name="Model" Type="Binary" Nullable="false" MaxLength="Max" FixedLength="false" />
+    <Property Name="ProductVersion" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="AspNetRole">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="AspNetUsers" Relationship="WebAssignmentModel.AspNetUserRoles" FromRole="AspNetRole" ToRole="AspNetUser" />
+  </EntityType>
+  <EntityType Name="AspNetUserClaim">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="ClaimType" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="ClaimValue" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="AspNetUser" Relationship="WebAssignmentModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" FromRole="AspNetUserClaim" ToRole="AspNetUser" />
+  </EntityType>
+  <EntityType Name="AspNetUserLogin">
+    <Key>
+      <PropertyRef Name="LoginProvider" />
+      <PropertyRef Name="ProviderKey" />
+      <PropertyRef Name="UserId" />
+    </Key>
+    <Property Name="LoginProvider" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="ProviderKey" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="AspNetUser" Relationship="WebAssignmentModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUserLogin" ToRole="AspNetUser" />
+  </EntityType>
+  <EntityType Name="AspNetUser">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="Email" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="EmailConfirmed" Type="Boolean" Nullable="false" />
+    <Property Name="PasswordHash" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="SecurityStamp" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="PhoneNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="PhoneNumberConfirmed" Type="Boolean" Nullable="false" />
+    <Property Name="TwoFactorEnabled" Type="Boolean" Nullable="false" />
+    <Property Name="LockoutEndDateUtc" Type="DateTime" Precision="3" />
+    <Property Name="LockoutEnabled" Type="Boolean" Nullable="false" />
+    <Property Name="AccessFailedCount" Type="Int32" Nullable="false" />
+    <Property Name="UserName" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="AspNetUserClaims" Relationship="WebAssignmentModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" FromRole="AspNetUser" ToRole="AspNetUserClaim" />
+    <NavigationProperty Name="AspNetUserLogins" Relationship="WebAssignmentModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUser" ToRole="AspNetUserLogin" />
+    <NavigationProperty Name="Orders" Relationship="WebAssignmentModel.FK__Orders__UserId__46B27FE2" FromRole="AspNetUser" ToRole="Order" />
+    <NavigationProperty Name="Reviews" Relationship="WebAssignmentModel.FK__Review__UserId__40F9A68C" FromRole="AspNetUser" ToRole="Review" />
+    <NavigationProperty Name="AspNetRoles" Relationship="WebAssignmentModel.AspNetUserRoles" FromRole="AspNetUser" ToRole="AspNetRole" />
+  </EntityType>
+  <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
+    <End Type="WebAssignmentModel.AspNetUser" Role="AspNetUser" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="WebAssignmentModel.AspNetUserClaim" Role="AspNetUserClaim" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUser">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="AspNetUserClaim">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
+    <End Type="WebAssignmentModel.AspNetUser" Role="AspNetUser" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="WebAssignmentModel.AspNetUserLogin" Role="AspNetUserLogin" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUser">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="AspNetUserLogin">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Orders__UserId__46B27FE2">
+    <End Type="WebAssignmentModel.AspNetUser" Role="AspNetUser" Multiplicity="1" />
+    <End Type="WebAssignmentModel.Order" Role="Order" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUser">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Order">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Review__UserId__40F9A68C">
+    <End Type="WebAssignmentModel.AspNetUser" Role="AspNetUser" Multiplicity="1" />
+    <End Type="WebAssignmentModel.Review" Role="Review" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUser">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Review">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="AspNetUserRoles">
+    <End Type="WebAssignmentModel.AspNetRole" Role="AspNetRole" Multiplicity="*" />
+    <End Type="WebAssignmentModel.AspNetUser" Role="AspNetUser" Multiplicity="*" />
+  </Association>
+</Schema>

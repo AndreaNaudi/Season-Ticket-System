@@ -1,0 +1,91 @@
+﻿@model WebAssignment.ViewModels.TicketSelectionViewModel
+@using WebAssignment.Models 
+@{
+    ViewBag.Title = "Ticket Selection";
+    if (User.IsInRole(RoleName.Administrator))
+    {
+        Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_LayoutUser.cshtml";
+    }
+    var ticket_games = Model.AvailableTickets;
+    var categories = Model.Categories;
+}
+
+<h2>Ticket Selection for @Model.Fixture</h2>
+@if (categories.Count() < 1)
+{
+    <h3>This game has no assigned tickets</h3>
+}
+else
+{
+    using (Html.BeginForm("Form", "Order"))
+    {
+        foreach (string categoryName in categories)
+        {
+            <h3>@categoryName</h3>
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>
+                            Position
+                        </th>
+                        <th>Price (€)</th>
+                        <th>View</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (Ticket_Game tg in ticket_games)
+                    {
+                        var ticket = tg.GetTicket();
+                        var cbName = tg.Id;
+                        if (ticket.Ref_Category.Name == @categoryName)
+                        {
+                            <tr class='clickable-row'>
+                                <td>
+                                   @ticket.getPosition()
+                                <td>@tg.Price</td>
+                                <td class="PositionTd">
+                                    <p>Hover to show view</p>
+                                    <img alt="view_image" src=@Url.Content("~/Uploads/" + tg.GetTicket().ViewUpload) />
+                                </td>
+                                
+                                <td ><input type="checkbox" name=@cbName></td>
+                            </tr>
+                        }
+
+                    }
+
+                </tbody>
+            </table>
+        }
+        @Html.AntiForgeryToken()
+
+        <button type="submit" class="btn btn-primary">Select Tickets</button>
+    }
+}
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $('.clickable-row').click(function (event) {
+                if (event.target.type !== 'checkbox') {
+                    $(':checkbox', this).trigger('click');
+                }
+            });
+
+            $("input[type='checkbox']").change(function (e) {
+                if ($(this).is(":checked")) {
+                    $(this).closest('tr').addClass("highlight-row");
+                } else {
+                    $(this).closest('tr').removeClass("highlight-row");
+                }
+            });
+        });
+    </script>
+}
+
+
+

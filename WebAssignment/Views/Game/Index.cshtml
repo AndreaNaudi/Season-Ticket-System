@@ -1,0 +1,48 @@
+﻿@model IEnumerable<WebAssignment.Models.Game>
+@using WebAssignment.Models
+@{
+    ViewBag.Title = "Games";
+    if (User.IsInRole(RoleName.Administrator))
+    {
+        Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_LayoutUser.cshtml";
+    }
+}
+
+<h2>Games</h2>
+@if (!Model.Any())
+{
+    <p>We don't have any games yet.</p>
+}
+else
+{
+    <table id="games" class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>Fixture</th>
+                <th>Competition</th>
+                <th>Date</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var game in Model)
+            {
+                <tr>
+                    <td>@game.getFixture()</td>
+                    <td>@game.Ref_Competition.Name</td>
+                    <td>@game.Date.ToString("HH:mm MMMM dd, yyyy")</td>
+                    <td>
+                        <span style="cursor:pointer" title="Details" onclick="location.href='@Url.Action("Details", "Game", new { id = game.Id })'" class="glyphicon glyphicon-eye-open"></span>
+                        &nbsp;
+                        <span style="cursor:pointer" title="Edit" onclick="location.href='@Url.Action("Edit", "Game", new { id = game.Id })'" class="glyphicon glyphicon-pencil"></span>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+<input type="button" class="btn btn-success" value="New Game" onclick="location.href='@Url.Action("New", "Game")'" />

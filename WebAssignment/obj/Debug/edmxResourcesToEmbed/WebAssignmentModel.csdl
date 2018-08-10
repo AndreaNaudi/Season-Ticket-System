@@ -1,0 +1,141 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="WebAssignmentModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Game">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="HomeTeam" Type="String" MaxLength="225" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="AwayTeam" Type="String" MaxLength="225" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="CompetitionId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Ref_Competition" Relationship="Self.Game_fk0" FromRole="Game" ToRole="Ref_Competition" />
+    <NavigationProperty Name="Ticket_Game" Relationship="Self.Ticket_Game_fk1" FromRole="Game" ToRole="Ticket_Game" />
+  </EntityType>
+  <EntityType Name="Ref_Category">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="225" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="Tickets" Relationship="Self.Ticket_fk0" FromRole="Ref_Category" ToRole="Ticket" />
+  </EntityType>
+  <EntityType Name="Ref_Competition">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="225" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="Games" Relationship="Self.Game_fk0" FromRole="Ref_Competition" ToRole="Game" />
+  </EntityType>
+  <EntityType Name="Review">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserId" Type="String" MaxLength="225" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Comment" Type="String" MaxLength="500" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="DateWritten" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Rating" Type="Int32" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Ticket">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Owner" Type="String" MaxLength="225" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="CategoryId" Type="Int32" Nullable="false" />
+    <Property Name="Section" Type="Int32" Nullable="false" />
+    <Property Name="Row" Type="Int32" Nullable="false" />
+    <Property Name="Seat" Type="Int32" Nullable="false" />
+    <Property Name="ViewUpload" Type="String" MaxLength="225" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Ref_Category" Relationship="Self.Ticket_fk0" FromRole="Ticket" ToRole="Ref_Category" />
+    <NavigationProperty Name="Ticket_Game" Relationship="Self.Ticket_Game_fk0" FromRole="Ticket" ToRole="Ticket_Game" />
+  </EntityType>
+  <EntityType Name="Ticket_Game">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TicketId" Type="Int32" Nullable="false" />
+    <Property Name="GameId" Type="Int32" Nullable="false" />
+    <Property Name="UserId" Type="String" MaxLength="225" FixedLength="false" Unicode="false" />
+    <Property Name="Price" Type="Double" />
+    <Property Name="Sold" Type="Int32" Nullable="false" />
+    <Property Name="Configured" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Game" Relationship="Self.Ticket_Game_fk1" FromRole="Ticket_Game" ToRole="Game" />
+    <NavigationProperty Name="Ticket" Relationship="Self.Ticket_Game_fk0" FromRole="Ticket_Game" ToRole="Ticket" />
+  </EntityType>
+  <Association Name="Game_fk0">
+    <End Role="Ref_Competition" Type="Self.Ref_Competition" Multiplicity="1" />
+    <End Role="Game" Type="Self.Game" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Ref_Competition">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Game">
+        <PropertyRef Name="CompetitionId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="Ticket_Game_fk1">
+    <End Role="Game" Type="Self.Game" Multiplicity="1" />
+    <End Role="Ticket_Game" Type="Self.Ticket_Game" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Game">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Ticket_Game">
+        <PropertyRef Name="GameId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="Ticket_fk0">
+    <End Role="Ref_Category" Type="Self.Ref_Category" Multiplicity="1" />
+    <End Role="Ticket" Type="Self.Ticket" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Ref_Category">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Ticket">
+        <PropertyRef Name="CategoryId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="Ticket_Game_fk0">
+    <End Role="Ticket" Type="Self.Ticket" Multiplicity="1" />
+    <End Role="Ticket_Game" Type="Self.Ticket_Game" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Ticket">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Ticket_Game">
+        <PropertyRef Name="TicketId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="WebAssignmentDbContext" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Games" EntityType="Self.Game" />
+    <EntitySet Name="Ref_Category" EntityType="Self.Ref_Category" />
+    <EntitySet Name="Ref_Competition" EntityType="Self.Ref_Competition" />
+    <EntitySet Name="Reviews" EntityType="Self.Review" />
+    <EntitySet Name="Tickets" EntityType="Self.Ticket" />
+    <EntitySet Name="Ticket_Game" EntityType="Self.Ticket_Game" />
+    <AssociationSet Name="Game_fk0" Association="Self.Game_fk0">
+      <End Role="Ref_Competition" EntitySet="Ref_Competition" />
+      <End Role="Game" EntitySet="Games" />
+    </AssociationSet>
+    <AssociationSet Name="Ticket_Game_fk1" Association="Self.Ticket_Game_fk1">
+      <End Role="Game" EntitySet="Games" />
+      <End Role="Ticket_Game" EntitySet="Ticket_Game" />
+    </AssociationSet>
+    <AssociationSet Name="Ticket_fk0" Association="Self.Ticket_fk0">
+      <End Role="Ref_Category" EntitySet="Ref_Category" />
+      <End Role="Ticket" EntitySet="Tickets" />
+    </AssociationSet>
+    <AssociationSet Name="Ticket_Game_fk0" Association="Self.Ticket_Game_fk0">
+      <End Role="Ticket" EntitySet="Tickets" />
+      <End Role="Ticket_Game" EntitySet="Ticket_Game" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

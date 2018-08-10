@@ -1,0 +1,94 @@
+﻿@model WebAssignment.ViewModels.GameDetailsViewModel
+@using WebAssignment.Models
+@{
+    ViewBag.Title = "Details";
+    if (User.IsInRole(RoleName.Administrator))
+    {
+        Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_LayoutUser.cshtml";
+    }
+    var ticket_games = Model.Tickets;
+    var categories = Model.Categories;
+
+}
+
+<h2>@Model.Fixture</h2>
+<table id="details_table" class="table table-bordered table-hover">
+    <tbody>
+        <tr>
+            <th>Competition</th>
+            <td>@Model.Competition</td>
+        </tr>
+        <tr>
+            <th>Date</th>
+            <td>@Model.Date</td>
+        </tr>
+
+
+    </tbody>
+</table>
+@if (categories.Count() < 1)
+{
+    <h3>This game has no assigned tickets</h3>
+}
+else
+{
+    using (Html.BeginForm("UpdatePrices", "Game", new { id = Model.Id}))
+    {
+        foreach (string categoryName in categories)
+        {
+            <h3>@categoryName</h3>
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>Owner</th>
+                        <th>Position</th>
+                        <th>Price (€)</th>
+                        <th>Sold</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (Ticket_Game tg in ticket_games)
+                    {
+                        var ticket = tg.GetTicket();
+                        var sold = (tg.Sold == 1) ? "Yes" : "No";
+                        var color = (tg.Sold == 1) ? "green" : "red";
+                        if (ticket.Ref_Category.Name == @categoryName)
+                        {
+                            <tr>
+                                <td>@ticket.Owner</td>
+                                <td>@Html.ActionLink(@ticket.getPosition(), "Edit", "Ticket", new { id = ticket.Id }, null)</td>
+                                @if (sold == "Yes")
+                                {
+                                    <td>@tg.Price</td>
+                                }
+                                else
+                                {
+                                    <td><input style="width:100px" class="form-control" name=@ticket.Id type="number" min="0" value="@tg.Price"></td>
+                                }
+                                <td>@sold</td>
+                                <td>
+                                    <span style="cursor:pointer" title="Details" onclick="location.href='@Url.Action("Details", "Ticket", new { id = ticket.Id })'" class="glyphicon glyphicon-eye-open"></span>
+                                    &nbsp;
+                                    <span style="cursor:pointer" title="Edit" onclick="location.href='@Url.Action("Edit", "Ticket", new { id = ticket.Id })'" class="glyphicon glyphicon-pencil"></span>
+                                </td>
+                            </tr>
+                        }
+
+                    }
+
+                </tbody>
+            </table>
+        }
+        @Html.AntiForgeryToken()
+
+        <button type="submit" class="btn btn-primary">Update Prices</button>
+    }
+}
+
+
+
